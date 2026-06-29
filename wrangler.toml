@@ -1,5 +1,0 @@
-name = "humanize"
-compatibility_date = "2026-06-29"
-
-[assets]
-directory = "."
