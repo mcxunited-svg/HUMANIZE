@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Humanize | Prompts para realismo</title>
+  <meta name="description" content="Prompts que tiram a cara de IA de fotos e vídeos. Gere prompts profissionais para modelos humanas ultrarrealistas.">
+  <meta property="og:title" content="Humanize | Prompts para realismo">
+  <meta property="og:image" content="images/og_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="logo-icon">
+        <img src="images/balenvich-logo.jpg" alt="Balenvich" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="logo-fallback">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="rgba(254,44,85,0.2)"/>
+            <path d="M9 8h1v8H9zm3-2h1v12h-1zm3 4h1v6h-1z" fill="#FE2C55"/>
+            <circle cx="18" cy="7" r="2" fill="#25F4EE"/>
+            <path d="M18 9v3c0 2-1.5 3.5-3.5 3.5" stroke="#25F4EE" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="logo-text-group">
+        <h1 class="logo-headline">
+          <span class="headline-humanize">HUMANIZE</span> sua modelo de IA
+        </h1>
+        <span class="logo-sub">Prompts que tiram a cara de IA de fotos e vídeos</span>
+      </div>
+    </div>
+
+    <div class="header-tabs" id="tab-switcher">
+      <button class="tab-btn active" data-tab="image" id="tab-image">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        Imagem
+      </button>
+      <button class="tab-btn" data-tab="video" id="tab-video">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
+        Vídeo
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== MAIN GRID ========== -->
+  <main class="main-grid">
+
+    <!-- ===== LEFT COLUMN ===== -->
+    <div class="col-left">
+
+      <!-- COMPARATOR -->
+      <div class="panel comparator-panel">
+        <div class="comparator" id="comparator">
+          <div class="comp-after">
+            <img
+              src="images/after.png"
+              alt="Modelo Humanizado" draggable="false" id="after-img"
+            >
+          </div>
+          <div class="comp-before" id="comp-before">
+            <img
+              src="images/before.png"
+              alt="Modelo IA" draggable="false" id="before-img"
+            >
+          </div>
+          <div class="comp-track" id="comp-track">
+            <div class="comp-divider" id="comp-divider">
+              <div class="comp-handle">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M3 12h18"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="comp-label comp-label-left">Original</div>
+          <div class="comp-label comp-label-right">Realista</div>
+        </div>
+      </div>
+
+      <!-- PROMPT BOX -->
+      <div class="panel prompt-panel">
+        <div class="prompt-header">
+          <h2 class="prompt-title">Seu prompt otimizado <span class="arrow-icon">↓</span></h2>
+        </div>
+        <div class="prompt-body">
+          <textarea
+            id="prompt-textarea"
+            class="prompt-textarea"
+            placeholder="Selecione opções de realismo para gerar seu prompt otimizado..."
+            readonly
+          ></textarea>
+          <div class="prompt-actions" id="prompt-actions">
+            <button class="act-btn act-copy" id="btn-copy" onclick="copyPrompt()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar
+            </button>
+            <button class="act-btn act-edit" id="btn-edit" onclick="toggleEdit()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Editar
+            </button>
+            <button class="act-btn act-clear" id="btn-clear" onclick="clearAll()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+              Limpar
+            </button>
+          </div>
+        </div>
+        <div class="prompt-footer">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" stroke-width="0"><path d="M12 2L2 19h20L12 2zm0 3l7.5 13h-15L12 5zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+          <span>Recomendamos o uso do <strong>NanoBanana Pro</strong> ou <strong>GPT Image 1.5</strong> para a criação das imagens.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== RIGHT COLUMN ===== -->
+    <div class="col-right">
+
+      <!-- PRESETS -->
+      <div class="panel presets-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Presets realistas <span class="arrow-icon">↓</span></h2>
+          <div class="presets-nav">
+            <button class="nav-arrow" id="presets-prev" onclick="scrollPresets(-1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="nav-arrow" id="presets-next" onclick="scrollPresets(1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="presets-track" id="presets-track">
+          <!-- JS rendered -->
+        </div>
+        <div class="presets-scrollbar">
+          <div class="presets-scrollbar-thumb" id="presets-scrollbar-thumb"></div>
+        </div>
+      </div>
+
+      <!-- OPTIONS -->
+      <div class="panel options-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Comandos para realismo <span class="arrow-icon">↓</span></h2>
+        </div>
+        <div class="subcategory-pills" id="subcategory-pills">
+          <!-- JS rendered -->
+        </div>
+        <div class="options-list" id="options-list">
+          <!-- JS rendered -->
+        </div>
+        <button class="show-more-btn" id="show-more-btn" onclick="toggleShowMore()" style="display:none">
+          <span id="show-more-text">Ver mais</span>
+          <svg id="show-more-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>© 2026 Todos os direitos reservados • Um projeto <a href="#" class="footer-link">@balenvich</a></span>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+    <span id="toast-msg">Copiado!</span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

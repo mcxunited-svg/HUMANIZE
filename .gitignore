@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Dev tools
+*.bat
+package.json
+package-lock.json
+extractor.html
+setup-supabase.sql
+
+# System
+.DS_Store
+Thumbs.db
